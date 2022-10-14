@@ -9,7 +9,7 @@
 ######################################
 # target
 ######################################
-TARGET = pumkin
+TARGET = pumpkin
 
 
 ######################################
@@ -34,7 +34,8 @@ BUILD_DIR = build
 C_SOURCES =  \
 Core/Src/main.c \
 Core/Src/stm32l0xx_it.c \
-Core/Src/system_stm32l0xx.c  
+Core/Src/system_stm32l0xx.c \
+Core/Src/Sys.c
 
 # ASM sources
 ASM_SOURCES =  \

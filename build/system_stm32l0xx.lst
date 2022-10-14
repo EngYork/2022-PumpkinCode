@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccBSTlD5.s 			page 1
+ARM GAS  /tmp/ccW0X8Y0.s 			page 1
 
 
    1              		.cpu cortex-m0plus
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccBSTlD5.s 			page 1
   30:Core/Src/system_stm32l0xx.c ****   * License. You may obtain a copy of the License at:
   31:Core/Src/system_stm32l0xx.c ****   *                        opensource.org/licenses/BSD-3-Clause
   32:Core/Src/system_stm32l0xx.c ****   *
-ARM GAS  /tmp/ccBSTlD5.s 			page 2
+ARM GAS  /tmp/ccW0X8Y0.s 			page 2
 
 
   33:Core/Src/system_stm32l0xx.c ****   ******************************************************************************
@@ -118,7 +118,7 @@ ARM GAS  /tmp/ccBSTlD5.s 			page 1
   87:Core/Src/system_stm32l0xx.c **** #if defined(USER_VECT_TAB_ADDRESS)
   88:Core/Src/system_stm32l0xx.c **** /*!< Uncomment the following line if you need to relocate your vector Table
   89:Core/Src/system_stm32l0xx.c ****      in Sram else user remap will be done in Flash. */
-ARM GAS  /tmp/ccBSTlD5.s 			page 3
+ARM GAS  /tmp/ccW0X8Y0.s 			page 3
 
 
   90:Core/Src/system_stm32l0xx.c **** /* #define VECT_TAB_SRAM */
@@ -178,7 +178,7 @@ ARM GAS  /tmp/ccBSTlD5.s 			page 1
  144:Core/Src/system_stm32l0xx.c **** 
  145:Core/Src/system_stm32l0xx.c **** /** @addtogroup STM32L0xx_System_Private_Functions
  146:Core/Src/system_stm32l0xx.c ****   * @{
-ARM GAS  /tmp/ccBSTlD5.s 			page 4
+ARM GAS  /tmp/ccW0X8Y0.s 			page 4
 
 
  147:Core/Src/system_stm32l0xx.c ****   */
@@ -238,7 +238,7 @@ ARM GAS  /tmp/ccBSTlD5.s 			page 1
  182:Core/Src/system_stm32l0xx.c ****   *
  183:Core/Src/system_stm32l0xx.c ****   *           - If SYSCLK source is PLL, SystemCoreClock will contain the HSE_VALUE(**)
  184:Core/Src/system_stm32l0xx.c ****   *             or HSI_VALUE(*) multiplied/divided by the PLL factors.
-ARM GAS  /tmp/ccBSTlD5.s 			page 5
+ARM GAS  /tmp/ccW0X8Y0.s 			page 5
 
 
  185:Core/Src/system_stm32l0xx.c ****   *
@@ -298,7 +298,7 @@ ARM GAS  /tmp/ccBSTlD5.s 			page 1
  213:Core/Src/system_stm32l0xx.c ****     case 0x04U:  /* HSI used as system clock */
  214:Core/Src/system_stm32l0xx.c ****       if ((RCC->CR & RCC_CR_HSIDIVF) != 0U)
  215:Core/Src/system_stm32l0xx.c ****       {
-ARM GAS  /tmp/ccBSTlD5.s 			page 6
+ARM GAS  /tmp/ccW0X8Y0.s 			page 6
 
 
  216:Core/Src/system_stm32l0xx.c ****         SystemCoreClock = HSI_VALUE / 4U;
@@ -358,7 +358,7 @@ ARM GAS  /tmp/ccBSTlD5.s 			page 1
  234:Core/Src/system_stm32l0xx.c **** 
  235:Core/Src/system_stm32l0xx.c ****       if (pllsource == 0x00U)
  110              		.loc 1 235 7 is_stmt 1 view .LVU23
-ARM GAS  /tmp/ccBSTlD5.s 			page 7
+ARM GAS  /tmp/ccW0X8Y0.s 			page 7
 
 
  111              		.loc 1 235 10 is_stmt 0 view .LVU24
@@ -418,7 +418,7 @@ ARM GAS  /tmp/ccBSTlD5.s 			page 1
  211:Core/Src/system_stm32l0xx.c ****       break;
  154              		.loc 1 211 52 is_stmt 0 view .LVU38
  155 005e 0133     		adds	r3, r3, #1
-ARM GAS  /tmp/ccBSTlD5.s 			page 8
+ARM GAS  /tmp/ccW0X8Y0.s 			page 8
 
 
  156              	.LVL16:
@@ -478,7 +478,7 @@ ARM GAS  /tmp/ccBSTlD5.s 			page 1
  188              		@ sp needed
  189 0082 10BD     		pop	{r4, pc}
  190              	.LVL20:
-ARM GAS  /tmp/ccBSTlD5.s 			page 9
+ARM GAS  /tmp/ccW0X8Y0.s 			page 9
 
 
  191              	.L3:
@@ -538,7 +538,7 @@ ARM GAS  /tmp/ccBSTlD5.s 			page 1
  230              		.loc 1 225 7 is_stmt 1 view .LVU63
  231 00a2 E3E7     		b	.L6
  232              	.LVL28:
-ARM GAS  /tmp/ccBSTlD5.s 			page 10
+ARM GAS  /tmp/ccW0X8Y0.s 			page 10
 
 
  233              	.L9:
@@ -598,7 +598,7 @@ ARM GAS  /tmp/ccBSTlD5.s 			page 1
  279              	.LFE41:
  281              		.global	PLLMulTable
  282              		.section	.rodata.PLLMulTable,"a"
-ARM GAS  /tmp/ccBSTlD5.s 			page 11
+ARM GAS  /tmp/ccW0X8Y0.s 			page 11
 
 
  283              		.align	2
@@ -632,24 +632,24 @@ ARM GAS  /tmp/ccBSTlD5.s 			page 1
  313              		.file 3 "/usr/arm-none-eabi/include/sys/_stdint.h"
  314              		.file 4 "Drivers/CMSIS/Device/ST/STM32L0xx/Include/system_stm32l0xx.h"
  315              		.file 5 "Drivers/CMSIS/Device/ST/STM32L0xx/Include/stm32l010x4.h"
-ARM GAS  /tmp/ccBSTlD5.s 			page 12
+ARM GAS  /tmp/ccW0X8Y0.s 			page 12
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 system_stm32l0xx.c
-     /tmp/ccBSTlD5.s:19     .text.SystemInit:0000000000000000 $t
-     /tmp/ccBSTlD5.s:25     .text.SystemInit:0000000000000000 SystemInit
-     /tmp/ccBSTlD5.s:40     .text.SystemCoreClockUpdate:0000000000000000 $t
-     /tmp/ccBSTlD5.s:46     .text.SystemCoreClockUpdate:0000000000000000 SystemCoreClockUpdate
-     /tmp/ccBSTlD5.s:271    .text.SystemCoreClockUpdate:00000000000000d4 $d
-     /tmp/ccBSTlD5.s:286    .rodata.PLLMulTable:0000000000000000 PLLMulTable
-     /tmp/ccBSTlD5.s:308    .data.SystemCoreClock:0000000000000000 SystemCoreClock
-     /tmp/ccBSTlD5.s:300    .rodata.AHBPrescTable:0000000000000000 AHBPrescTable
-     /tmp/ccBSTlD5.s:283    .rodata.PLLMulTable:0000000000000000 $d
-     /tmp/ccBSTlD5.s:293    .rodata.APBPrescTable:0000000000000000 APBPrescTable
-     /tmp/ccBSTlD5.s:290    .rodata.APBPrescTable:0000000000000000 $d
-     /tmp/ccBSTlD5.s:297    .rodata.AHBPrescTable:0000000000000000 $d
-     /tmp/ccBSTlD5.s:305    .data.SystemCoreClock:0000000000000000 $d
+     /tmp/ccW0X8Y0.s:19     .text.SystemInit:0000000000000000 $t
+     /tmp/ccW0X8Y0.s:25     .text.SystemInit:0000000000000000 SystemInit
+     /tmp/ccW0X8Y0.s:40     .text.SystemCoreClockUpdate:0000000000000000 $t
+     /tmp/ccW0X8Y0.s:46     .text.SystemCoreClockUpdate:0000000000000000 SystemCoreClockUpdate
+     /tmp/ccW0X8Y0.s:271    .text.SystemCoreClockUpdate:00000000000000d4 $d
+     /tmp/ccW0X8Y0.s:286    .rodata.PLLMulTable:0000000000000000 PLLMulTable
+     /tmp/ccW0X8Y0.s:308    .data.SystemCoreClock:0000000000000000 SystemCoreClock
+     /tmp/ccW0X8Y0.s:300    .rodata.AHBPrescTable:0000000000000000 AHBPrescTable
+     /tmp/ccW0X8Y0.s:283    .rodata.PLLMulTable:0000000000000000 $d
+     /tmp/ccW0X8Y0.s:293    .rodata.APBPrescTable:0000000000000000 APBPrescTable
+     /tmp/ccW0X8Y0.s:290    .rodata.APBPrescTable:0000000000000000 $d
+     /tmp/ccW0X8Y0.s:297    .rodata.AHBPrescTable:0000000000000000 $d
+     /tmp/ccW0X8Y0.s:305    .data.SystemCoreClock:0000000000000000 $d
 
 UNDEFINED SYMBOLS
 __aeabi_uidiv

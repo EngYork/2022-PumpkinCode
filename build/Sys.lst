@@ -1,0 +1,475 @@
+ARM GAS  /tmp/cckXiOCF.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.file	"Sys.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.file 1 "Core/Src/Sys.c"
+  18              		.section	.text.InitClocks,"ax",%progbits
+  19              		.align	1
+  20              		.global	InitClocks
+  21              		.syntax unified
+  22              		.code	16
+  23              		.thumb_func
+  25              	InitClocks:
+  26              	.LFB41:
+   1:Core/Src/Sys.c **** #include "Sys.h"
+   2:Core/Src/Sys.c **** #include "stm32l0xx.h"
+   3:Core/Src/Sys.c **** #include "system_stm32l0xx.h"
+   4:Core/Src/Sys.c **** #include <stdint.h>
+   5:Core/Src/Sys.c **** 
+   6:Core/Src/Sys.c **** void InitClocks(void);
+   7:Core/Src/Sys.c **** void InitSPI(void);
+   8:Core/Src/Sys.c **** void InitGPIO(void);
+   9:Core/Src/Sys.c **** 
+  10:Core/Src/Sys.c **** void InitSys(void) {
+  11:Core/Src/Sys.c ****   SystemInit();
+  12:Core/Src/Sys.c ****   InitClocks();
+  13:Core/Src/Sys.c ****   InitGPIO();
+  14:Core/Src/Sys.c ****   InitSPI();
+  15:Core/Src/Sys.c **** }
+  16:Core/Src/Sys.c **** 
+  17:Core/Src/Sys.c **** void InitClocks(void) {
+  27              		.loc 1 17 23 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31 0000 10B5     		push	{r4, lr}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 4, -8
+  35              		.cfi_offset 14, -4
+  18:Core/Src/Sys.c ****   RCC->APB2ENR |= (uint32_t)1 << 22; //Enable DBG clock
+  36              		.loc 1 18 3 view .LVU1
+  37              		.loc 1 18 6 is_stmt 0 view .LVU2
+  38 0002 234B     		ldr	r3, .L9
+  39 0004 596B     		ldr	r1, [r3, #52]
+  40              		.loc 1 18 16 view .LVU3
+ARM GAS  /tmp/cckXiOCF.s 			page 2
+
+
+  41 0006 8022     		movs	r2, #128
+  42 0008 D203     		lsls	r2, r2, #15
+  43 000a 0A43     		orrs	r2, r1
+  44 000c 5A63     		str	r2, [r3, #52]
+  19:Core/Src/Sys.c ****   FLASH->ACR |= (uint32_t)1; //Set 1 wait state on NVM
+  45              		.loc 1 19 3 is_stmt 1 view .LVU4
+  46              		.loc 1 19 8 is_stmt 0 view .LVU5
+  47 000e 2149     		ldr	r1, .L9+4
+  48 0010 0A68     		ldr	r2, [r1]
+  49              		.loc 1 19 14 view .LVU6
+  50 0012 0120     		movs	r0, #1
+  51 0014 0243     		orrs	r2, r0
+  52 0016 0A60     		str	r2, [r1]
+  20:Core/Src/Sys.c ****   RCC->CFGR |= (uint32_t)1 << 15; //Wakeup to HSI16
+  53              		.loc 1 20 3 is_stmt 1 view .LVU7
+  54              		.loc 1 20 6 is_stmt 0 view .LVU8
+  55 0018 D968     		ldr	r1, [r3, #12]
+  56              		.loc 1 20 13 view .LVU9
+  57 001a 8022     		movs	r2, #128
+  58 001c 1202     		lsls	r2, r2, #8
+  59 001e 0A43     		orrs	r2, r1
+  60 0020 DA60     		str	r2, [r3, #12]
+  21:Core/Src/Sys.c ****   RCC->CR &= !((uint32_t)1 << 24); //Disable PLL
+  61              		.loc 1 21 3 is_stmt 1 view .LVU10
+  62              		.loc 1 21 6 is_stmt 0 view .LVU11
+  63 0022 1A68     		ldr	r2, [r3]
+  64              		.loc 1 21 11 view .LVU12
+  65 0024 0022     		movs	r2, #0
+  66 0026 1A60     		str	r2, [r3]
+  22:Core/Src/Sys.c ****   while (RCC->CR & ((uint32_t)1 << 25)); //Wait till PLL is off
+  67              		.loc 1 22 3 is_stmt 1 view .LVU13
+  68              	.L2:
+  69              		.loc 1 22 10 discriminator 1 view .LVU14
+  70              		.loc 1 22 13 is_stmt 0 discriminator 1 view .LVU15
+  71 0028 194B     		ldr	r3, .L9
+  72 002a 1B68     		ldr	r3, [r3]
+  73              		.loc 1 22 10 discriminator 1 view .LVU16
+  74 002c 9B01     		lsls	r3, r3, #6
+  75 002e FBD4     		bmi	.L2
+  23:Core/Src/Sys.c ****   RCC->CR |= (uint32_t)1; //Enable HSI16
+  76              		.loc 1 23 3 is_stmt 1 view .LVU17
+  77              		.loc 1 23 6 is_stmt 0 view .LVU18
+  78 0030 174A     		ldr	r2, .L9
+  79 0032 1368     		ldr	r3, [r2]
+  80              		.loc 1 23 11 view .LVU19
+  81 0034 0121     		movs	r1, #1
+  82 0036 0B43     		orrs	r3, r1
+  83 0038 1360     		str	r3, [r2]
+  24:Core/Src/Sys.c ****   while (!(RCC->CR & (uint32_t)1 << 2)); //Wait till HSI16 is ready
+  84              		.loc 1 24 3 is_stmt 1 view .LVU20
+  85              	.L3:
+  86              		.loc 1 24 10 discriminator 1 view .LVU21
+  87              		.loc 1 24 15 is_stmt 0 discriminator 1 view .LVU22
+  88 003a 154B     		ldr	r3, .L9
+  89 003c 1B68     		ldr	r3, [r3]
+  90              		.loc 1 24 10 discriminator 1 view .LVU23
+  91 003e 5B07     		lsls	r3, r3, #29
+ARM GAS  /tmp/cckXiOCF.s 			page 3
+
+
+  92 0040 FBD5     		bpl	.L3
+  25:Core/Src/Sys.c ****   //Set PLL for 24MHz output ((16/4)*6 = 24)
+  26:Core/Src/Sys.c ****   RCC->CFGR |= (uint32_t)0b11 << 22; //Divide HSI16 by 4
+  93              		.loc 1 26 3 is_stmt 1 view .LVU24
+  94              		.loc 1 26 6 is_stmt 0 view .LVU25
+  95 0042 134B     		ldr	r3, .L9
+  96 0044 D968     		ldr	r1, [r3, #12]
+  97              		.loc 1 26 13 view .LVU26
+  98 0046 C022     		movs	r2, #192
+  99 0048 1204     		lsls	r2, r2, #16
+ 100 004a 0A43     		orrs	r2, r1
+ 101 004c DA60     		str	r2, [r3, #12]
+  27:Core/Src/Sys.c ****   RCC->CFGR |= (uint32_t)0b0010 << 18; //Multiply by 6
+ 102              		.loc 1 27 3 is_stmt 1 view .LVU27
+ 103              		.loc 1 27 6 is_stmt 0 view .LVU28
+ 104 004e D968     		ldr	r1, [r3, #12]
+ 105              		.loc 1 27 13 view .LVU29
+ 106 0050 8022     		movs	r2, #128
+ 107 0052 1203     		lsls	r2, r2, #12
+ 108 0054 0A43     		orrs	r2, r1
+ 109 0056 DA60     		str	r2, [r3, #12]
+  28:Core/Src/Sys.c ****   RCC->CR |= (uint32_t)1 << 24; //Enable PLL
+ 110              		.loc 1 28 3 is_stmt 1 view .LVU30
+ 111              		.loc 1 28 6 is_stmt 0 view .LVU31
+ 112 0058 1968     		ldr	r1, [r3]
+ 113              		.loc 1 28 11 view .LVU32
+ 114 005a 8022     		movs	r2, #128
+ 115 005c 5204     		lsls	r2, r2, #17
+ 116 005e 0A43     		orrs	r2, r1
+ 117 0060 1A60     		str	r2, [r3]
+  29:Core/Src/Sys.c ****   while (!(RCC->CR & ((uint32_t)1 << 25))); //Wait till PLL is stable
+ 118              		.loc 1 29 3 is_stmt 1 view .LVU33
+ 119              	.L4:
+ 120              		.loc 1 29 10 discriminator 1 view .LVU34
+ 121              		.loc 1 29 15 is_stmt 0 discriminator 1 view .LVU35
+ 122 0062 0B4B     		ldr	r3, .L9
+ 123 0064 1B68     		ldr	r3, [r3]
+ 124              		.loc 1 29 10 discriminator 1 view .LVU36
+ 125 0066 9B01     		lsls	r3, r3, #6
+ 126 0068 FBD5     		bpl	.L4
+  30:Core/Src/Sys.c ****   RCC->CFGR |= (uint32_t)0b11; //Set PLL as system clock
+ 127              		.loc 1 30 3 is_stmt 1 view .LVU37
+ 128              		.loc 1 30 6 is_stmt 0 view .LVU38
+ 129 006a 094A     		ldr	r2, .L9
+ 130 006c D368     		ldr	r3, [r2, #12]
+ 131              		.loc 1 30 13 view .LVU39
+ 132 006e 0321     		movs	r1, #3
+ 133 0070 0B43     		orrs	r3, r1
+ 134 0072 D360     		str	r3, [r2, #12]
+  31:Core/Src/Sys.c ****   while (!(RCC->CFGR & (uint32_t)0b11 << 2)); //Wait till PLL is set as system clock
+ 135              		.loc 1 31 3 is_stmt 1 view .LVU40
+ 136              	.L5:
+ 137              		.loc 1 31 10 discriminator 1 view .LVU41
+ 138              		.loc 1 31 15 is_stmt 0 discriminator 1 view .LVU42
+ 139 0074 064B     		ldr	r3, .L9
+ 140 0076 DB68     		ldr	r3, [r3, #12]
+ 141              		.loc 1 31 22 discriminator 1 view .LVU43
+ARM GAS  /tmp/cckXiOCF.s 			page 4
+
+
+ 142 0078 0C22     		movs	r2, #12
+ 143              		.loc 1 31 10 discriminator 1 view .LVU44
+ 144 007a 1A42     		tst	r2, r3
+ 145 007c FAD0     		beq	.L5
+  32:Core/Src/Sys.c ****   SystemCoreClockUpdate();
+ 146              		.loc 1 32 3 is_stmt 1 view .LVU45
+ 147 007e FFF7FEFF 		bl	SystemCoreClockUpdate
+ 148              	.LVL0:
+  33:Core/Src/Sys.c ****   RCC->APB1ENR |= (uint32_t)1 << 28; //Enable PWR config clock
+ 149              		.loc 1 33 3 view .LVU46
+ 150              		.loc 1 33 6 is_stmt 0 view .LVU47
+ 151 0082 034A     		ldr	r2, .L9
+ 152 0084 916B     		ldr	r1, [r2, #56]
+ 153              		.loc 1 33 16 view .LVU48
+ 154 0086 8023     		movs	r3, #128
+ 155 0088 5B05     		lsls	r3, r3, #21
+ 156 008a 0B43     		orrs	r3, r1
+ 157 008c 9363     		str	r3, [r2, #56]
+  34:Core/Src/Sys.c **** }
+ 158              		.loc 1 34 1 view .LVU49
+ 159              		@ sp needed
+ 160 008e 10BD     		pop	{r4, pc}
+ 161              	.L10:
+ 162              		.align	2
+ 163              	.L9:
+ 164 0090 00100240 		.word	1073876992
+ 165 0094 00200240 		.word	1073881088
+ 166              		.cfi_endproc
+ 167              	.LFE41:
+ 169              		.section	.text.InitSPI,"ax",%progbits
+ 170              		.align	1
+ 171              		.global	InitSPI
+ 172              		.syntax unified
+ 173              		.code	16
+ 174              		.thumb_func
+ 176              	InitSPI:
+ 177              	.LFB42:
+  35:Core/Src/Sys.c **** 
+  36:Core/Src/Sys.c **** void InitSPI(void) {
+ 178              		.loc 1 36 20 is_stmt 1 view -0
+ 179              		.cfi_startproc
+ 180              		@ args = 0, pretend = 0, frame = 0
+ 181              		@ frame_needed = 0, uses_anonymous_args = 0
+ 182              		@ link register save eliminated.
+  37:Core/Src/Sys.c ****   RCC->APB2RSTR ^= (uint32_t)1 << 12; //Reset SPI1
+ 183              		.loc 1 37 3 view .LVU51
+ 184              		.loc 1 37 6 is_stmt 0 view .LVU52
+ 185 0000 114B     		ldr	r3, .L12
+ 186 0002 596A     		ldr	r1, [r3, #36]
+ 187              		.loc 1 37 17 view .LVU53
+ 188 0004 8022     		movs	r2, #128
+ 189 0006 5201     		lsls	r2, r2, #5
+ 190 0008 5140     		eors	r1, r2
+ 191 000a 5962     		str	r1, [r3, #36]
+  38:Core/Src/Sys.c ****   RCC->APB2RSTR ^= (uint32_t)1 << 12;
+ 192              		.loc 1 38 3 is_stmt 1 view .LVU54
+ 193              		.loc 1 38 6 is_stmt 0 view .LVU55
+ARM GAS  /tmp/cckXiOCF.s 			page 5
+
+
+ 194 000c 596A     		ldr	r1, [r3, #36]
+ 195              		.loc 1 38 17 view .LVU56
+ 196 000e 5140     		eors	r1, r2
+ 197 0010 5962     		str	r1, [r3, #36]
+  39:Core/Src/Sys.c ****   RCC->APB2ENR |= (uint32_t)1 << 12; //Enable SPI Clock
+ 198              		.loc 1 39 3 is_stmt 1 view .LVU57
+ 199              		.loc 1 39 6 is_stmt 0 view .LVU58
+ 200 0012 596B     		ldr	r1, [r3, #52]
+ 201              		.loc 1 39 16 view .LVU59
+ 202 0014 0A43     		orrs	r2, r1
+ 203 0016 5A63     		str	r2, [r3, #52]
+  40:Core/Src/Sys.c ****   SPI1->CR2 |= (uint32_t)1 << 7;
+ 204              		.loc 1 40 3 is_stmt 1 view .LVU60
+ 205              		.loc 1 40 7 is_stmt 0 view .LVU61
+ 206 0018 0C4B     		ldr	r3, .L12+4
+ 207 001a 5A68     		ldr	r2, [r3, #4]
+ 208              		.loc 1 40 13 view .LVU62
+ 209 001c 8021     		movs	r1, #128
+ 210 001e 0A43     		orrs	r2, r1
+ 211 0020 5A60     		str	r2, [r3, #4]
+  41:Core/Src/Sys.c ****   SPI1->CR1 |= (uint32_t)0b001 << 3; //Set Baud to 6MHz (Bus 24MHz/4)
+ 212              		.loc 1 41 3 is_stmt 1 view .LVU63
+ 213              		.loc 1 41 7 is_stmt 0 view .LVU64
+ 214 0022 1A68     		ldr	r2, [r3]
+ 215              		.loc 1 41 13 view .LVU65
+ 216 0024 7839     		subs	r1, r1, #120
+ 217 0026 0A43     		orrs	r2, r1
+ 218 0028 1A60     		str	r2, [r3]
+  42:Core/Src/Sys.c ****   SPI1->CR1 |= (uint32_t)1 << 2; //Master mode
+ 219              		.loc 1 42 3 is_stmt 1 view .LVU66
+ 220              		.loc 1 42 7 is_stmt 0 view .LVU67
+ 221 002a 1A68     		ldr	r2, [r3]
+ 222              		.loc 1 42 13 view .LVU68
+ 223 002c 0439     		subs	r1, r1, #4
+ 224 002e 0A43     		orrs	r2, r1
+ 225 0030 1A60     		str	r2, [r3]
+  43:Core/Src/Sys.c ****   SPI1->CR1 |= (uint32_t)1 << 15; //Single Line
+ 226              		.loc 1 43 3 is_stmt 1 view .LVU69
+ 227              		.loc 1 43 7 is_stmt 0 view .LVU70
+ 228 0032 1968     		ldr	r1, [r3]
+ 229              		.loc 1 43 13 view .LVU71
+ 230 0034 8022     		movs	r2, #128
+ 231 0036 1202     		lsls	r2, r2, #8
+ 232 0038 0A43     		orrs	r2, r1
+ 233 003a 1A60     		str	r2, [r3]
+  44:Core/Src/Sys.c ****   SPI1->CR1 |= (uint32_t)1 << 14; //TX Only
+ 234              		.loc 1 44 3 is_stmt 1 view .LVU72
+ 235              		.loc 1 44 7 is_stmt 0 view .LVU73
+ 236 003c 1968     		ldr	r1, [r3]
+ 237              		.loc 1 44 13 view .LVU74
+ 238 003e 8022     		movs	r2, #128
+ 239 0040 D201     		lsls	r2, r2, #7
+ 240 0042 0A43     		orrs	r2, r1
+ 241 0044 1A60     		str	r2, [r3]
+  45:Core/Src/Sys.c **** }
+ 242              		.loc 1 45 1 view .LVU75
+ 243              		@ sp needed
+ARM GAS  /tmp/cckXiOCF.s 			page 6
+
+
+ 244 0046 7047     		bx	lr
+ 245              	.L13:
+ 246              		.align	2
+ 247              	.L12:
+ 248 0048 00100240 		.word	1073876992
+ 249 004c 00300140 		.word	1073819648
+ 250              		.cfi_endproc
+ 251              	.LFE42:
+ 253              		.section	.text.InitGPIO,"ax",%progbits
+ 254              		.align	1
+ 255              		.global	InitGPIO
+ 256              		.syntax unified
+ 257              		.code	16
+ 258              		.thumb_func
+ 260              	InitGPIO:
+ 261              	.LFB43:
+  46:Core/Src/Sys.c **** 
+  47:Core/Src/Sys.c **** void InitGPIO(void) {
+ 262              		.loc 1 47 21 is_stmt 1 view -0
+ 263              		.cfi_startproc
+ 264              		@ args = 0, pretend = 0, frame = 0
+ 265              		@ frame_needed = 0, uses_anonymous_args = 0
+ 266              		@ link register save eliminated.
+  48:Core/Src/Sys.c ****   RCC->IOPENR |= (uint32_t)0b11; //Enable Port A and B
+ 267              		.loc 1 48 3 view .LVU77
+ 268              		.loc 1 48 6 is_stmt 0 view .LVU78
+ 269 0000 104A     		ldr	r2, .L15
+ 270 0002 D36A     		ldr	r3, [r2, #44]
+ 271              		.loc 1 48 15 view .LVU79
+ 272 0004 0321     		movs	r1, #3
+ 273 0006 0B43     		orrs	r3, r1
+ 274 0008 D362     		str	r3, [r2, #44]
+  49:Core/Src/Sys.c ****   GPIOB->MODER &= !((uint32_t)0b11 << 2);
+ 275              		.loc 1 49 3 is_stmt 1 view .LVU80
+ 276              		.loc 1 49 8 is_stmt 0 view .LVU81
+ 277 000a 0F4B     		ldr	r3, .L15+4
+ 278 000c 1A68     		ldr	r2, [r3]
+ 279              		.loc 1 49 16 view .LVU82
+ 280 000e 0021     		movs	r1, #0
+ 281 0010 1960     		str	r1, [r3]
+  50:Core/Src/Sys.c ****   GPIOB->MODER |= (uint32_t)0b10 << 2; //Set AF on PB1
+ 282              		.loc 1 50 3 is_stmt 1 view .LVU83
+ 283              		.loc 1 50 8 is_stmt 0 view .LVU84
+ 284 0012 1A68     		ldr	r2, [r3]
+ 285              		.loc 1 50 16 view .LVU85
+ 286 0014 0820     		movs	r0, #8
+ 287 0016 0243     		orrs	r2, r0
+ 288 0018 1A60     		str	r2, [r3]
+  51:Core/Src/Sys.c ****   GPIOB->OSPEEDR |= ((uint32_t)0b10 << 2); //Set PB1 to High Speed
+ 289              		.loc 1 51 3 is_stmt 1 view .LVU86
+ 290              		.loc 1 51 8 is_stmt 0 view .LVU87
+ 291 001a 9A68     		ldr	r2, [r3, #8]
+ 292              		.loc 1 51 18 view .LVU88
+ 293 001c 0243     		orrs	r2, r0
+ 294 001e 9A60     		str	r2, [r3, #8]
+  52:Core/Src/Sys.c ****   GPIOA->MODER &= !(((uint32_t)0xf)<<6); //Set A3,4,5,6 to Input
+ 295              		.loc 1 52 3 is_stmt 1 view .LVU89
+ARM GAS  /tmp/cckXiOCF.s 			page 7
+
+
+ 296              		.loc 1 52 8 is_stmt 0 view .LVU90
+ 297 0020 A023     		movs	r3, #160
+ 298 0022 DB05     		lsls	r3, r3, #23
+ 299 0024 1A68     		ldr	r2, [r3]
+ 300              		.loc 1 52 16 view .LVU91
+ 301 0026 1960     		str	r1, [r3]
+  53:Core/Src/Sys.c ****   GPIOA->PUPDR |= (uint32_t) 0b01010101 << 6; //Set Pull-up on A3,4,5,6
+ 302              		.loc 1 53 3 is_stmt 1 view .LVU92
+ 303              		.loc 1 53 8 is_stmt 0 view .LVU93
+ 304 0028 D968     		ldr	r1, [r3, #12]
+ 305              		.loc 1 53 16 view .LVU94
+ 306 002a AA22     		movs	r2, #170
+ 307 002c 5201     		lsls	r2, r2, #5
+ 308 002e 0A43     		orrs	r2, r1
+ 309 0030 DA60     		str	r2, [r3, #12]
+  54:Core/Src/Sys.c ****   EXTI->IMR |= (uint32_t)0b1111 << 3; //Enable EXTI lines 3,4,5,6
+ 310              		.loc 1 54 3 is_stmt 1 view .LVU95
+ 311              		.loc 1 54 7 is_stmt 0 view .LVU96
+ 312 0032 064B     		ldr	r3, .L15+8
+ 313 0034 1A68     		ldr	r2, [r3]
+ 314              		.loc 1 54 13 view .LVU97
+ 315 0036 7821     		movs	r1, #120
+ 316 0038 0A43     		orrs	r2, r1
+ 317 003a 1A60     		str	r2, [r3]
+  55:Core/Src/Sys.c ****   EXTI->FTSR |= (uint32_t)0b1111 << 3; //Enable falling trigger on EXTI lines 3,4,5,6
+ 318              		.loc 1 55 3 is_stmt 1 view .LVU98
+ 319              		.loc 1 55 7 is_stmt 0 view .LVU99
+ 320 003c DA68     		ldr	r2, [r3, #12]
+ 321              		.loc 1 55 14 view .LVU100
+ 322 003e 0A43     		orrs	r2, r1
+ 323 0040 DA60     		str	r2, [r3, #12]
+  56:Core/Src/Sys.c **** }
+ 324              		.loc 1 56 1 view .LVU101
+ 325              		@ sp needed
+ 326 0042 7047     		bx	lr
+ 327              	.L16:
+ 328              		.align	2
+ 329              	.L15:
+ 330 0044 00100240 		.word	1073876992
+ 331 0048 00040050 		.word	1342178304
+ 332 004c 00040140 		.word	1073808384
+ 333              		.cfi_endproc
+ 334              	.LFE43:
+ 336              		.section	.text.InitSys,"ax",%progbits
+ 337              		.align	1
+ 338              		.global	InitSys
+ 339              		.syntax unified
+ 340              		.code	16
+ 341              		.thumb_func
+ 343              	InitSys:
+ 344              	.LFB40:
+  10:Core/Src/Sys.c ****   SystemInit();
+ 345              		.loc 1 10 20 is_stmt 1 view -0
+ 346              		.cfi_startproc
+ 347              		@ args = 0, pretend = 0, frame = 0
+ 348              		@ frame_needed = 0, uses_anonymous_args = 0
+ 349 0000 10B5     		push	{r4, lr}
+ARM GAS  /tmp/cckXiOCF.s 			page 8
+
+
+ 350              	.LCFI1:
+ 351              		.cfi_def_cfa_offset 8
+ 352              		.cfi_offset 4, -8
+ 353              		.cfi_offset 14, -4
+  11:Core/Src/Sys.c ****   InitClocks();
+ 354              		.loc 1 11 3 view .LVU103
+ 355 0002 FFF7FEFF 		bl	SystemInit
+ 356              	.LVL1:
+  12:Core/Src/Sys.c ****   InitGPIO();
+ 357              		.loc 1 12 3 view .LVU104
+ 358 0006 FFF7FEFF 		bl	InitClocks
+ 359              	.LVL2:
+  13:Core/Src/Sys.c ****   InitSPI();
+ 360              		.loc 1 13 3 view .LVU105
+ 361 000a FFF7FEFF 		bl	InitGPIO
+ 362              	.LVL3:
+  14:Core/Src/Sys.c **** }
+ 363              		.loc 1 14 3 view .LVU106
+ 364 000e FFF7FEFF 		bl	InitSPI
+ 365              	.LVL4:
+  15:Core/Src/Sys.c **** 
+ 366              		.loc 1 15 1 is_stmt 0 view .LVU107
+ 367              		@ sp needed
+ 368 0012 10BD     		pop	{r4, pc}
+ 369              		.cfi_endproc
+ 370              	.LFE40:
+ 372              		.text
+ 373              	.Letext0:
+ 374              		.file 2 "/usr/arm-none-eabi/include/machine/_default_types.h"
+ 375              		.file 3 "/usr/arm-none-eabi/include/sys/_stdint.h"
+ 376              		.file 4 "Drivers/CMSIS/Device/ST/STM32L0xx/Include/stm32l010x4.h"
+ 377              		.file 5 "Drivers/CMSIS/Device/ST/STM32L0xx/Include/system_stm32l0xx.h"
+ARM GAS  /tmp/cckXiOCF.s 			page 9
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 Sys.c
+     /tmp/cckXiOCF.s:19     .text.InitClocks:0000000000000000 $t
+     /tmp/cckXiOCF.s:25     .text.InitClocks:0000000000000000 InitClocks
+     /tmp/cckXiOCF.s:164    .text.InitClocks:0000000000000090 $d
+     /tmp/cckXiOCF.s:170    .text.InitSPI:0000000000000000 $t
+     /tmp/cckXiOCF.s:176    .text.InitSPI:0000000000000000 InitSPI
+     /tmp/cckXiOCF.s:248    .text.InitSPI:0000000000000048 $d
+     /tmp/cckXiOCF.s:254    .text.InitGPIO:0000000000000000 $t
+     /tmp/cckXiOCF.s:260    .text.InitGPIO:0000000000000000 InitGPIO
+     /tmp/cckXiOCF.s:330    .text.InitGPIO:0000000000000044 $d
+     /tmp/cckXiOCF.s:337    .text.InitSys:0000000000000000 $t
+     /tmp/cckXiOCF.s:343    .text.InitSys:0000000000000000 InitSys
+
+UNDEFINED SYMBOLS
+SystemCoreClockUpdate
+SystemInit
