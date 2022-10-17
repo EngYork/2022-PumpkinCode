@@ -9,16 +9,18 @@ void InitGPIO(void);
 
 void InitSys(void) {
   SystemInit();
+  __disable_irq();
   InitClocks();
   InitGPIO();
   InitSPI();
+  __enable_irq();
 }
 
 void InitClocks(void) {
   RCC->APB2ENR |= (uint32_t)1 << 22; //Enable DBG clock
   FLASH->ACR |= (uint32_t)1; //Set 1 wait state on NVM
   RCC->CFGR |= (uint32_t)1 << 15; //Wakeup to HSI16
-  RCC->CR &= !((uint32_t)1 << 24); //Disable PLL
+  RCC->CR &= ~((uint32_t)1 << 24); //Disable PLL
   while (RCC->CR & ((uint32_t)1 << 25)); //Wait till PLL is off
   RCC->CR |= (uint32_t)1; //Enable HSI16
   while (!(RCC->CR & (uint32_t)1 << 2)); //Wait till HSI16 is ready
@@ -42,15 +44,27 @@ void InitSPI(void) {
   SPI1->CR1 |= (uint32_t)1 << 2; //Master mode
   SPI1->CR1 |= (uint32_t)1 << 15; //Single Line
   SPI1->CR1 |= (uint32_t)1 << 14; //TX Only
+  SPI1->CR2 |= (uint32_t)1 << 7; //Enable TX Empty IRQ
+  SPI1->CR1 |= (uint32_t)1 << 6; //Enable SPI
+  NVIC_EnableIRQ(SPI1_IRQn);
+  NVIC_SetPriority(SPI1_IRQn, 0);
 }
 
 void InitGPIO(void) {
   RCC->IOPENR |= (uint32_t)0b11; //Enable Port A and B
-  GPIOB->MODER &= !((uint32_t)0b11 << 2);
+  GPIOB->MODER &= ~((uint32_t)0b11 << 2);
   GPIOB->MODER |= (uint32_t)0b10 << 2; //Set AF on PB1
+  GPIOB->MODER |= (uint32_t)0b10 << 6; //Set AF on PB3
   GPIOB->OSPEEDR |= ((uint32_t)0b10 << 2); //Set PB1 to High Speed
-  GPIOA->MODER &= !(((uint32_t)0xf)<<6); //Set A3,4,5,6 to Input
+  GPIOA->MODER &= ~(((uint32_t)0b11111111)<<6); //Set A3,4,5,6 to Input
   GPIOA->PUPDR |= (uint32_t) 0b01010101 << 6; //Set Pull-up on A3,4,5,6
   EXTI->IMR |= (uint32_t)0b1111 << 3; //Enable EXTI lines 3,4,5,6
   EXTI->FTSR |= (uint32_t)0b1111 << 3; //Enable falling trigger on EXTI lines 3,4,5,6
+}
+
+void SpiWrite(uint8_t byte) {
+  if((SPI1->SR & SPI_SR_TXE) == SPI_SR_TXE) /* Test Tx empty */
+    {
+      *((volatile uint8_t*)&SPI1->DR) = byte; //Write to DR as an 8-byte register
+    }
 }

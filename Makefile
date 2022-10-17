@@ -35,7 +35,8 @@ C_SOURCES =  \
 Core/Src/main.c \
 Core/Src/stm32l0xx_it.c \
 Core/Src/system_stm32l0xx.c \
-Core/Src/Sys.c
+Core/Src/Sys.c \
+Core/Src/neopixel.c
 
 # ASM sources
 ASM_SOURCES =  \

@@ -1,0 +1,10 @@
+#ifndef NEOPIXELH
+#define NEOPIXELH
+#include <stdint.h>
+#define PIXEL_NUMBER 10
+extern uint8_t DATA_BUFFER[3*PIXEL_NUMBER]; //RGB,RGB,RGB,...
+/* SPI Bytes to generate Bit at 6MHz */
+#define ZERO 0xC0
+#define ONE 0xF0
+
+#endif

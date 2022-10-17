@@ -1,0 +1,342 @@
+ARM GAS  /tmp/cczXEIfP.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 0
+  10              		.eabi_attribute 18, 4
+  11              		.file	"neopixel.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.getNextDat,"ax",%progbits
+  16              		.align	1
+  17              		.global	getNextDat
+  18              		.arch armv6s-m
+  19              		.syntax unified
+  20              		.code	16
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	getNextDat:
+  25              	.LFB40:
+  26              		.file 1 "Core/Src/neopixel.c"
+   1:Core/Src/neopixel.c **** #include "neopixel.h"
+   2:Core/Src/neopixel.c **** #include <stdint.h>
+   3:Core/Src/neopixel.c **** #include "Sys.h"
+   4:Core/Src/neopixel.c **** #include "stm32l010x4.h"
+   5:Core/Src/neopixel.c **** uint8_t DATA_BUFFER[3 * PIXEL_NUMBER] = {128,128,128};
+   6:Core/Src/neopixel.c **** volatile uint32_t current_byte = 0;
+   7:Core/Src/neopixel.c **** volatile uint32_t current_bit = 0;
+   8:Core/Src/neopixel.c **** volatile uint8_t write_done = 0;
+   9:Core/Src/neopixel.c **** 
+  10:Core/Src/neopixel.c **** uint8_t getNextDat(void) {
+  27              		.loc 1 10 26 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  11:Core/Src/neopixel.c ****   if (current_byte >= 3*PIXEL_NUMBER) return 0;
+  32              		.loc 1 11 3 view .LVU1
+  33              		.loc 1 11 20 is_stmt 0 view .LVU2
+  34 0000 114B     		ldr	r3, .L7
+  35 0002 1B68     		ldr	r3, [r3]
+  36              		.loc 1 11 6 view .LVU3
+  37 0004 1D2B     		cmp	r3, #29
+  38 0006 1AD8     		bhi	.L4
+  12:Core/Src/neopixel.c ****   uint8_t bit = (DATA_BUFFER[current_byte] & (1 << current_bit++)) != 0;
+  39              		.loc 1 12 3 is_stmt 1 view .LVU4
+  40              		.loc 1 12 29 is_stmt 0 view .LVU5
+  41 0008 0F4B     		ldr	r3, .L7
+  42 000a 1B68     		ldr	r3, [r3]
+  43 000c 0F4A     		ldr	r2, .L7+4
+  44 000e D35C     		ldrb	r3, [r2, r3]
+  45              		.loc 1 12 63 view .LVU6
+  46 0010 0F4A     		ldr	r2, .L7+8
+ARM GAS  /tmp/cczXEIfP.s 			page 2
+
+
+  47 0012 1168     		ldr	r1, [r2]
+  48 0014 481C     		adds	r0, r1, #1
+  49 0016 1060     		str	r0, [r2]
+  50              		.loc 1 12 68 view .LVU7
+  51 0018 0B41     		asrs	r3, r3, r1
+  52 001a 1900     		movs	r1, r3
+  53 001c 0123     		movs	r3, #1
+  54 001e 0B40     		ands	r3, r1
+  55              	.LVL0:
+  13:Core/Src/neopixel.c ****   if (current_bit == 8){
+  56              		.loc 1 13 3 is_stmt 1 view .LVU8
+  57              		.loc 1 13 19 is_stmt 0 view .LVU9
+  58 0020 1268     		ldr	r2, [r2]
+  59              		.loc 1 13 6 view .LVU10
+  60 0022 082A     		cmp	r2, #8
+  61 0024 03D0     		beq	.L6
+  62              	.L3:
+  14:Core/Src/neopixel.c ****     current_bit = 0;
+  15:Core/Src/neopixel.c ****     current_byte ++;
+  16:Core/Src/neopixel.c ****   }
+  17:Core/Src/neopixel.c ****   return bit == 1? ONE:ZERO;
+  63              		.loc 1 17 3 is_stmt 1 view .LVU11
+  64              		.loc 1 17 23 is_stmt 0 view .LVU12
+  65 0026 002B     		cmp	r3, #0
+  66 0028 0BD0     		beq	.L5
+  67 002a F020     		movs	r0, #240
+  68 002c 08E0     		b	.L2
+  69              	.L6:
+  14:Core/Src/neopixel.c ****     current_bit = 0;
+  70              		.loc 1 14 5 is_stmt 1 view .LVU13
+  14:Core/Src/neopixel.c ****     current_bit = 0;
+  71              		.loc 1 14 17 is_stmt 0 view .LVU14
+  72 002e 084A     		ldr	r2, .L7+8
+  73 0030 0021     		movs	r1, #0
+  74 0032 1160     		str	r1, [r2]
+  15:Core/Src/neopixel.c ****   }
+  75              		.loc 1 15 5 is_stmt 1 view .LVU15
+  15:Core/Src/neopixel.c ****   }
+  76              		.loc 1 15 18 is_stmt 0 view .LVU16
+  77 0034 0449     		ldr	r1, .L7
+  78 0036 0A68     		ldr	r2, [r1]
+  79 0038 0132     		adds	r2, r2, #1
+  80 003a 0A60     		str	r2, [r1]
+  81 003c F3E7     		b	.L3
+  82              	.LVL1:
+  83              	.L4:
+  11:Core/Src/neopixel.c ****   uint8_t bit = (DATA_BUFFER[current_byte] & (1 << current_bit++)) != 0;
+  84              		.loc 1 11 46 view .LVU17
+  85 003e 0020     		movs	r0, #0
+  86              	.L2:
+  18:Core/Src/neopixel.c **** }
+  87              		.loc 1 18 1 view .LVU18
+  88              		@ sp needed
+  89 0040 7047     		bx	lr
+  90              	.LVL2:
+  91              	.L5:
+  17:Core/Src/neopixel.c **** }
+ARM GAS  /tmp/cczXEIfP.s 			page 3
+
+
+  92              		.loc 1 17 23 view .LVU19
+  93 0042 C020     		movs	r0, #192
+  94 0044 FCE7     		b	.L2
+  95              	.L8:
+  96 0046 C046     		.align	2
+  97              	.L7:
+  98 0048 00000000 		.word	.LANCHOR0
+  99 004c 00000000 		.word	.LANCHOR1
+ 100 0050 00000000 		.word	.LANCHOR2
+ 101              		.cfi_endproc
+ 102              	.LFE40:
+ 104              		.section	.text.writeData,"ax",%progbits
+ 105              		.align	1
+ 106              		.global	writeData
+ 107              		.syntax unified
+ 108              		.code	16
+ 109              		.thumb_func
+ 110              		.fpu softvfp
+ 112              	writeData:
+ 113              	.LFB41:
+  19:Core/Src/neopixel.c **** 
+  20:Core/Src/neopixel.c **** void writeData(void) {
+ 114              		.loc 1 20 22 is_stmt 1 view -0
+ 115              		.cfi_startproc
+ 116              		@ args = 0, pretend = 0, frame = 0
+ 117              		@ frame_needed = 0, uses_anonymous_args = 0
+ 118 0000 10B5     		push	{r4, lr}
+ 119              	.LCFI0:
+ 120              		.cfi_def_cfa_offset 8
+ 121              		.cfi_offset 4, -8
+ 122              		.cfi_offset 14, -4
+  21:Core/Src/neopixel.c ****   current_bit = current_byte = 0;
+ 123              		.loc 1 21 3 view .LVU21
+ 124              		.loc 1 21 30 is_stmt 0 view .LVU22
+ 125 0002 0023     		movs	r3, #0
+ 126 0004 0A4A     		ldr	r2, .L14
+ 127 0006 1360     		str	r3, [r2]
+ 128              		.loc 1 21 15 view .LVU23
+ 129 0008 0A4A     		ldr	r2, .L14+4
+ 130 000a 1360     		str	r3, [r2]
+  22:Core/Src/neopixel.c ****   SpiWrite(getNextDat());
+ 131              		.loc 1 22 3 is_stmt 1 view .LVU24
+ 132 000c FFF7FEFF 		bl	getNextDat
+ 133              	.LVL3:
+ 134 0010 FFF7FEFF 		bl	SpiWrite
+ 135              	.LVL4:
+  23:Core/Src/neopixel.c ****   while (!write_done){
+ 136              		.loc 1 23 3 view .LVU25
+ 137              	.L11:
+ 138              		.loc 1 23 10 is_stmt 0 view .LVU26
+ 139 0014 084B     		ldr	r3, .L14+8
+ 140 0016 1B78     		ldrb	r3, [r3]
+ 141              		.loc 1 23 9 view .LVU27
+ 142 0018 002B     		cmp	r3, #0
+ 143 001a 07D1     		bne	.L13
+  24:Core/Src/neopixel.c ****     if (current_byte >= 3*PIXEL_NUMBER) {
+ 144              		.loc 1 24 5 is_stmt 1 view .LVU28
+ARM GAS  /tmp/cczXEIfP.s 			page 4
+
+
+ 145              		.loc 1 24 22 is_stmt 0 view .LVU29
+ 146 001c 044B     		ldr	r3, .L14
+ 147 001e 1B68     		ldr	r3, [r3]
+ 148              		.loc 1 24 8 view .LVU30
+ 149 0020 1D2B     		cmp	r3, #29
+ 150 0022 F7D9     		bls	.L11
+  25:Core/Src/neopixel.c ****       write_done = 1;
+ 151              		.loc 1 25 7 is_stmt 1 view .LVU31
+ 152              		.loc 1 25 18 is_stmt 0 view .LVU32
+ 153 0024 044B     		ldr	r3, .L14+8
+ 154 0026 0122     		movs	r2, #1
+ 155 0028 1A70     		strb	r2, [r3]
+ 156 002a F3E7     		b	.L11
+ 157              	.L13:
+  26:Core/Src/neopixel.c ****     }
+  27:Core/Src/neopixel.c ****   }
+  28:Core/Src/neopixel.c **** }
+ 158              		.loc 1 28 1 view .LVU33
+ 159              		@ sp needed
+ 160 002c 10BD     		pop	{r4, pc}
+ 161              	.L15:
+ 162 002e C046     		.align	2
+ 163              	.L14:
+ 164 0030 00000000 		.word	.LANCHOR0
+ 165 0034 00000000 		.word	.LANCHOR2
+ 166 0038 00000000 		.word	.LANCHOR3
+ 167              		.cfi_endproc
+ 168              	.LFE41:
+ 170              		.section	.text.SPI1_IRQHandler,"ax",%progbits
+ 171              		.align	1
+ 172              		.global	SPI1_IRQHandler
+ 173              		.syntax unified
+ 174              		.code	16
+ 175              		.thumb_func
+ 176              		.fpu softvfp
+ 178              	SPI1_IRQHandler:
+ 179              	.LFB42:
+  29:Core/Src/neopixel.c **** 
+  30:Core/Src/neopixel.c **** 
+  31:Core/Src/neopixel.c **** /**
+  32:Core/Src/neopixel.c ****  * SPI IRQ
+  33:Core/Src/neopixel.c ****  */
+  34:Core/Src/neopixel.c **** void SPI1_IRQHandler(void) {
+ 180              		.loc 1 34 28 is_stmt 1 view -0
+ 181              		.cfi_startproc
+ 182              		@ args = 0, pretend = 0, frame = 0
+ 183              		@ frame_needed = 0, uses_anonymous_args = 0
+ 184 0000 10B5     		push	{r4, lr}
+ 185              	.LCFI1:
+ 186              		.cfi_def_cfa_offset 8
+ 187              		.cfi_offset 4, -8
+ 188              		.cfi_offset 14, -4
+  35:Core/Src/neopixel.c ****   __asm("bkpt");
+ 189              		.loc 1 35 3 view .LVU35
+ 190              		.syntax divided
+ 191              	@ 35 "Core/Src/neopixel.c" 1
+ 192 0002 00BE     		bkpt
+ARM GAS  /tmp/cczXEIfP.s 			page 5
+
+
+ 193              	@ 0 "" 2
+  36:Core/Src/neopixel.c ****   if (SPI1->SR & 1<<1) {
+ 194              		.loc 1 36 3 view .LVU36
+ 195              		.loc 1 36 11 is_stmt 0 view .LVU37
+ 196              		.thumb
+ 197              		.syntax unified
+ 198 0004 044B     		ldr	r3, .L19
+ 199 0006 9B68     		ldr	r3, [r3, #8]
+ 200              		.loc 1 36 6 view .LVU38
+ 201 0008 9B07     		lsls	r3, r3, #30
+ 202 000a 00D4     		bmi	.L18
+ 203              	.L16:
+  37:Core/Src/neopixel.c ****     SpiWrite(getNextDat());
+  38:Core/Src/neopixel.c ****   }
+  39:Core/Src/neopixel.c **** }
+ 204              		.loc 1 39 1 view .LVU39
+ 205              		@ sp needed
+ 206 000c 10BD     		pop	{r4, pc}
+ 207              	.L18:
+  37:Core/Src/neopixel.c ****     SpiWrite(getNextDat());
+ 208              		.loc 1 37 5 is_stmt 1 view .LVU40
+ 209 000e FFF7FEFF 		bl	getNextDat
+ 210              	.LVL5:
+ 211 0012 FFF7FEFF 		bl	SpiWrite
+ 212              	.LVL6:
+ 213              		.loc 1 39 1 is_stmt 0 view .LVU41
+ 214 0016 F9E7     		b	.L16
+ 215              	.L20:
+ 216              		.align	2
+ 217              	.L19:
+ 218 0018 00300140 		.word	1073819648
+ 219              		.cfi_endproc
+ 220              	.LFE42:
+ 222              		.global	write_done
+ 223              		.global	current_bit
+ 224              		.global	current_byte
+ 225              		.global	DATA_BUFFER
+ 226              		.section	.bss.current_bit,"aw",%nobits
+ 227              		.align	2
+ 228              		.set	.LANCHOR2,. + 0
+ 231              	current_bit:
+ 232 0000 00000000 		.space	4
+ 233              		.section	.bss.current_byte,"aw",%nobits
+ 234              		.align	2
+ 235              		.set	.LANCHOR0,. + 0
+ 238              	current_byte:
+ 239 0000 00000000 		.space	4
+ 240              		.section	.bss.write_done,"aw",%nobits
+ 241              		.set	.LANCHOR3,. + 0
+ 244              	write_done:
+ 245 0000 00       		.space	1
+ 246              		.section	.data.DATA_BUFFER,"aw"
+ 247              		.align	2
+ 248              		.set	.LANCHOR1,. + 0
+ 251              	DATA_BUFFER:
+ 252 0000 80       		.byte	-128
+ 253 0001 80       		.byte	-128
+ARM GAS  /tmp/cczXEIfP.s 			page 6
+
+
+ 254 0002 80       		.byte	-128
+ 255 0003 00000000 		.space	27
+ 255      00000000 
+ 255      00000000 
+ 255      00000000 
+ 255      00000000 
+ 256              		.text
+ 257              	.Letext0:
+ 258              		.file 2 "/usr/arm-none-eabi/include/machine/_default_types.h"
+ 259              		.file 3 "/usr/arm-none-eabi/include/sys/_stdint.h"
+ 260              		.file 4 "Core/Inc/neopixel.h"
+ 261              		.file 5 "Drivers/CMSIS/Device/ST/STM32L0xx/Include/system_stm32l0xx.h"
+ 262              		.file 6 "Drivers/CMSIS/Device/ST/STM32L0xx/Include/stm32l010x4.h"
+ 263              		.file 7 "Core/Inc/Sys.h"
+ARM GAS  /tmp/cczXEIfP.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 neopixel.c
+     /tmp/cczXEIfP.s:16     .text.getNextDat:0000000000000000 $t
+     /tmp/cczXEIfP.s:24     .text.getNextDat:0000000000000000 getNextDat
+     /tmp/cczXEIfP.s:98     .text.getNextDat:0000000000000048 $d
+     /tmp/cczXEIfP.s:105    .text.writeData:0000000000000000 $t
+     /tmp/cczXEIfP.s:112    .text.writeData:0000000000000000 writeData
+     /tmp/cczXEIfP.s:164    .text.writeData:0000000000000030 $d
+     /tmp/cczXEIfP.s:171    .text.SPI1_IRQHandler:0000000000000000 $t
+     /tmp/cczXEIfP.s:178    .text.SPI1_IRQHandler:0000000000000000 SPI1_IRQHandler
+     /tmp/cczXEIfP.s:218    .text.SPI1_IRQHandler:0000000000000018 $d
+     /tmp/cczXEIfP.s:244    .bss.write_done:0000000000000000 write_done
+     /tmp/cczXEIfP.s:231    .bss.current_bit:0000000000000000 current_bit
+     /tmp/cczXEIfP.s:238    .bss.current_byte:0000000000000000 current_byte
+     /tmp/cczXEIfP.s:251    .data.DATA_BUFFER:0000000000000000 DATA_BUFFER
+     /tmp/cczXEIfP.s:227    .bss.current_bit:0000000000000000 $d
+     /tmp/cczXEIfP.s:234    .bss.current_byte:0000000000000000 $d
+     /tmp/cczXEIfP.s:245    .bss.write_done:0000000000000000 $d
+     /tmp/cczXEIfP.s:247    .data.DATA_BUFFER:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+SpiWrite

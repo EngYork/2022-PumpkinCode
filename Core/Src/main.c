@@ -1,7 +1,10 @@
 #include "Sys.h"
+#include "neopixel.h"
 
 int main(void)
 {
   InitSys();
-  __asm("BKPT");
-}
+  writeData();
+  while(1){
+
+  }}
