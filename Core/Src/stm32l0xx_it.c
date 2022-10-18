@@ -16,6 +16,8 @@
   ******************************************************************************
   */
 #include "stm32l0xx_it.h"
+#include "stm32l010x4.h"
+#include "Sys.h"
 #include <stdint.h>
 
 volatile uint32_t msTick = 0;
@@ -60,7 +62,7 @@ void PendSV_Handler(void)
   */
 void SysTick_Handler(void)
 {
-  msTick = 0;
+  msTick++;
 }
 
 uint32_t getTicks(void) {

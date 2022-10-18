@@ -3,7 +3,7 @@
 #include <stdint.h>
 /* Init the system */
 void InitSys(void);
-/* Write a byte to the SPI. Non Blocking */
-void SpiWrite(uint8_t);
+void DisableSpiDMA(void);
+void EnableSpiDMA(uint8_t* source, uint16_t numBytes);
 
 #endif
