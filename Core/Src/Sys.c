@@ -17,6 +17,7 @@ void InitSys(void) {
   __enable_irq();
 }
 
+#ifdef STM32L010x4
 void InitClocks(void) {
   RCC->APB2ENR |= (uint32_t)1 << 22; //Enable DBG clock
   RCC->APB2ENR |= (uint32_t)1; //Enable SYSCFG clock
@@ -64,14 +65,17 @@ void InitGPIO(void) {
   RCC->IOPENR |= (uint32_t)0b11; //Enable Port A and B
   GPIOB->MODER &= ~((uint32_t)0b11 << 2);
   GPIOB->MODER |= (uint32_t)0b10 << 2; //Set AF mode on PB1
-  GPIOA->MODER |= (uint32_t)0b10 << 10; //Set AF mode on PA5
   GPIOB->AFR[0] |= (uint32_t)1 << 4; //Set SPI1 MOSI AF on PB1
-  GPIOA->AFR[0] &= ~((uint32_t)0b1111 << 20); //Set SPI CLK AF on PA5
   GPIOB->OSPEEDR |= ((uint32_t)0b10 << 2); //Set PB1 to High Speed
-  //GPIOA->MODER &= ~(((uint32_t)0b11111111)<<6); //Set A3,4,5,6 to Input
-  //GPIOA->PUPDR |= (uint32_t) 0b01010101 << 6; //Set Pull-up on A3,4,5,6
+  GPIOA->MODER &= ~(((uint32_t)0b11111111)<<6); //Set A3,4,5,6 to Input
+  GPIOA->PUPDR |= (uint32_t) 0b01010101 << 6; //Set Pull-up on A3,4,5,6
   EXTI->IMR |= (uint32_t)0b1111 << 3; //Enable EXTI lines 3,4,5,6
   EXTI->FTSR |= (uint32_t)0b1111 << 3; //Enable falling trigger on EXTI lines 3,4,5,6
+}
+
+uint8_t readButton(void) {
+  //Buttons are on pull-ups, so high when open.
+  return (GPIOA->IDR & (uint32_t)1 << 6) >= 1? 0:1; //So return 0 if IDR=1, 1 if IDR=0
 }
 
 /* Enable DMA Channel 3 On/Off */
@@ -88,3 +92,4 @@ void DisableSpiDMA(void) {
   DMA1_Channel3->CCR &= ~((uint32_t)0b1);
   while (SPI1->SR & (uint32_t)1<<7); //Wait till not busy;
 }
+#endif
