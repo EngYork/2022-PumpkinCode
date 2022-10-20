@@ -3,6 +3,7 @@
 #include <stdint.h>
 #define PIXEL_NUMBER 10
 #define DATA_BYTE_NUMBER 1+( 3 * 8 * PIXEL_NUMBER)
+#define RST_TX_CNT 300
 /* SPI Bytes to generate Bit at 6MHz */
 #define ZERO 0b11000000
 #define ONE 0b11111000

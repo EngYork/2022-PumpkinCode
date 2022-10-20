@@ -3,10 +3,11 @@
 #include "Sys.h"
 #include "stm32l010x4.h"
 
-uint8_t BIT_DATA_BUFFER[DATA_BYTE_NUMBER] = {0}; //Start empty byte, then data
+uint8_t BIT_DATA_BUFFER[DATA_BYTE_NUMBER] = {0}; // Start empty byte, then data
+const uint8_t RESET_BIT_BUFFER[RST_TX_CNT] = {0}; //Empty data buffer to reset bus.
 /* Prepare Bit Data for transfer */
 void prepBitData(const uint8_t DATA_IN[][3], uint8_t BIT_DATA_OUT[]);
-void transmitBitBuffer(const uint8_t pixels);
+void transmitBitBuffer(const uint8_t* buffer, const uint32_t pixels);
 
 volatile uint8_t write_done = 1;
 volatile uint8_t* spiDRpt = (uint8_t*)&(SPI1->DR);
@@ -16,23 +17,21 @@ uint8_t getBitByte(uint8_t bit) {
 }
 
 void sendReset(void) {
-  SPI1->CR2 &= ~((uint32_t)1 << 1); //Disable TXDMA
-  for (uint16_t i = 0; i < 300; i++) {
-    while(SPI1->SR & (uint32_t)1<<7); //Wait till not busy
-    SPI1->DR = 0; //Send a 0
-  }
+  transmitBitBuffer(RESET_BIT_BUFFER, RST_TX_CNT);
 }
 
 void writeData(const uint8_t GRB_DAT[PIXEL_NUMBER][3], const uint8_t pixels) {
   prepBitData(GRB_DAT, BIT_DATA_BUFFER);
-  transmitBitBuffer(pixels);
+  sendReset();
+  transmitBitBuffer(BIT_DATA_BUFFER, 1+(3*8*pixels));
 }
 
 void clearData(const uint8_t pixels) {
   for (uint32_t i = 1; i <= 3*8*pixels; i++) {
     BIT_DATA_BUFFER[i] = getBitByte(0);
   }
-  transmitBitBuffer(pixels);
+  sendReset();
+  transmitBitBuffer(BIT_DATA_BUFFER, 3*8*pixels);
 }
 
 void prepBitData(const uint8_t DATA_IN[][3], uint8_t BIT_DATA_OUT[]){
@@ -46,14 +45,13 @@ void prepBitData(const uint8_t DATA_IN[][3], uint8_t BIT_DATA_OUT[]){
   }
 }
 
-void transmitBitBuffer(const uint8_t pixels) {
+void transmitBitBuffer(const uint8_t* buffer, const uint32_t length) {
   while (!write_done) {
     //Wait for previous write to complete
   }
   write_done = 0;
   SPI1->CR1 |= (uint32_t)1 << 6; //Enable SPI
-  sendReset();
-  EnableSpiDMA(BIT_DATA_BUFFER,1+( 3 * 8 * pixels));
+  EnableSpiDMA(buffer,length);
 }
 
 /**
@@ -73,6 +71,4 @@ void DMA1_Channel2_3_IRQHandler(void) {
  * SPI IRQ
  */
 void SPI1_IRQHandler(void) {
-  if (SPI1->SR & 1<<1) {
-  }
 }

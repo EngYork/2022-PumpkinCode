@@ -20,8 +20,6 @@
 #include "Sys.h"
 #include <stdint.h>
 
-volatile uint32_t msTick = 0;
-
 /**
   * @brief This function handles Non maskable interrupt.
   */
@@ -55,16 +53,4 @@ void SVC_Handler(void)
 void PendSV_Handler(void)
 {
 
-}
-
-/**
-  * @brief This function handles System tick timer.
-  */
-void SysTick_Handler(void)
-{
-  msTick++;
-}
-
-uint32_t getTicks(void) {
-  return msTick;
 }
