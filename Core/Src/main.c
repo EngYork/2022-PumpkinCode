@@ -32,11 +32,11 @@ int main(void)
       }
       clearButtonPress();
       clearData(PIXEL_NUMBER);
-      /*for (uint8_t i = 0; i <= PIXEL_NUMBER; i++) {
+      for (uint8_t i = 0; i <= PIXEL_NUMBER; i++) {
 	uint32_t initTick = getTicks();
 	while (getTicks() < initTick+300);
 	writeData(*ACTIVE_DATA_BUFFER, i);
-	}*/writeData(*ACTIVE_DATA_BUFFER, PIXEL_NUMBER);
+      }
     }
   }
 }
