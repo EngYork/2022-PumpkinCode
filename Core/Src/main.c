@@ -22,11 +22,14 @@ const uint8_t (*ACTIVE_DATA_BUFFER)[][3] = &INIT_DATA_BUFFER;
 
 #define FX_DELAY_mS 20
 #define LED_MAX 200
+#define EDGE_LED_CNT 8
 
 //Base indexes for each "Column" of LEDs.
 const uint8_t COL_BASES[4] = {2, 5, 8, 9};
 //Size of each LED column. Reverse indexed from the "base".
-const uint8_t COL_SIZES[4] = {3,3,3,1};
+const uint8_t COL_SIZES[4] = {3, 3, 3, 1};
+//The leds around the edge
+const uint8_t EDGE_LEDS[EDGE_LED_CNT] = {3,6,9,8,5,2,1,0};
 
 //Clear a data buffer
 void resetBuffer(uint8_t buffer[PIXEL_NUMBER][3]);
@@ -35,6 +38,10 @@ uint32_t l_rand(void);
 //Init LFSR Seed
 uint32_t LFSR = 0xDEADBEEF;
 uint32_t LFSR_BIT = 0;
+//End of effect
+uint8_t effect_done;
+//Current position in effect sequence (if applicable)
+uint32_t current_fx_index;
 
 int main(void)
 {
@@ -44,7 +51,7 @@ int main(void)
   clearData(PIXEL_NUMBER);
   for (uint8_t i = 0; i <= PIXEL_NUMBER; i++) {
     uint32_t initTick = getTicks();
-    while (getTicks() < initTick+300);
+    while (getTicks() < initTick+200);
     writeData(*ACTIVE_DATA_BUFFER, i);
   }
 
@@ -57,7 +64,6 @@ int main(void)
       ACTIVE_DATA_BUFFER = &ALT_DATA_BUFFER;
       break;
     case 2: { //Fade in fade out
-      ACTIVE_DATA_BUFFER = &FX_DATA_BUFFER;
       if (getTicks() > lastFxRun + 20){
 	if (FX_DATA_BUFFER[0][0] >= LED_MAX - effectDir) {
 	  effectDir = -effectDir; //Go Down
@@ -72,7 +78,6 @@ int main(void)
     }
       break;
     case 3: { //Cheapo flame effect
-      ACTIVE_DATA_BUFFER = &FX_DATA_BUFFER;
       if (getTicks() > lastFxRun + 250){
 	resetBuffer(FX_DATA_BUFFER);
 	for (uint8_t i = 0; i < 4; i++) {
@@ -95,15 +100,41 @@ int main(void)
       }
     }
       break;
+    case 4: { //Slightly rubbish chase effect
+      if (getTicks() > lastFxRun + 125){
+        resetBuffer(FX_DATA_BUFFER);
+	if (current_fx_index < EDGE_LED_CNT) {
+	  FX_DATA_BUFFER[EDGE_LEDS[current_fx_index]][0] = 100; //Led n
+	  FX_DATA_BUFFER[EDGE_LEDS[current_fx_index]][1] = 50;
+	  FX_DATA_BUFFER[EDGE_LEDS[current_fx_index]][2] = 10;
+	  
+	  FX_DATA_BUFFER[EDGE_LEDS[(current_fx_index-1) % EDGE_LED_CNT]][0] = 10; //n-1
+	  FX_DATA_BUFFER[EDGE_LEDS[(current_fx_index-1) % EDGE_LED_CNT]][1] = 5;
+	  FX_DATA_BUFFER[EDGE_LEDS[(current_fx_index-1) % EDGE_LED_CNT]][2] = 1;
+	  
+	  FX_DATA_BUFFER[EDGE_LEDS[(current_fx_index+1) % EDGE_LED_CNT]][0] = 10; //n+1
+	  FX_DATA_BUFFER[EDGE_LEDS[(current_fx_index+1) % EDGE_LED_CNT]][1] = 5;
+	  FX_DATA_BUFFER[EDGE_LEDS[(current_fx_index+1) % EDGE_LED_CNT]][2] = 1;
+	} else {
+	  current_fx_index = 0;
+	}
+	current_fx_index = (current_fx_index+1) % EDGE_LED_CNT;
+	lastFxRun = getTicks();
+      }
+    }
+      break;
     }
 
     if(getButtonPressed()){
-      press = (press+1)%4;
-      clearButtonPress();
-      clearData(PIXEL_NUMBER);
-      if (press > 1) {
+      press = (press+1)%5;
+      clearButtonPress(); //I've consumed the press now
+      clearData(PIXEL_NUMBER); //Clear the display
+      if (press > 1) { //All the active stuff goes after press 1.
 	resetBuffer(FX_DATA_BUFFER);
 	lastFxRun = 0; //Reset FX delay count
+	effect_done = 0;
+	current_fx_index = 0;
+	ACTIVE_DATA_BUFFER = &FX_DATA_BUFFER;
       }
     }
     
