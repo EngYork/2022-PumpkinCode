@@ -127,6 +127,31 @@
   {
     "arguments": [
       "/usr/sbin/arm-none-eabi-gcc",
+      "-c",
+      "-mcpu=cortex-m0plus",
+      "-mthumb",
+      "-DSTM32L010x4",
+      "-ICore/Inc",
+      "-IDrivers/CMSIS/Device/ST/STM32L0xx/Include",
+      "-IDrivers/CMSIS/Include",
+      "-Og",
+      "-Wall",
+      "-fdata-sections",
+      "-ffunction-sections",
+      "-g",
+      "-gdwarf-2",
+      "-Wa,-a,-ad,-alms=build/fx.lst",
+      "-o",
+      "build/fx.o",
+      "Core/Src/fx.c"
+    ],
+    "directory": "/home/david/Documents/ShockSoc/2022-PumpkinCode",
+    "file": "/home/david/Documents/ShockSoc/2022-PumpkinCode/Core/Src/fx.c",
+    "output": "/home/david/Documents/ShockSoc/2022-PumpkinCode/build/fx.o"
+  },
+  {
+    "arguments": [
+      "/usr/sbin/arm-none-eabi-gcc",
       "-x",
       "assembler-with-cpp",
       "-c",
