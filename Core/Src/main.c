@@ -29,7 +29,9 @@ const uint8_t COL_BASES[4] = {2, 5, 8, 9};
 //Size of each LED column. Reverse indexed from the "base".
 const uint8_t COL_SIZES[4] = {3, 3, 3, 1};
 //The leds around the edge
-const uint8_t EDGE_LEDS[EDGE_LED_CNT] = {3,6,9,8,5,2,1,0};
+const uint8_t EDGE_LEDS[EDGE_LED_CNT] = {3, 6, 9, 8, 5, 2, 1, 0};
+//Translate cartesian co-ords to a LED
+const uint8_t CART_LED_INDEX[4][3] = {{0,0,0},{0,0,0},{0,0,0},{0,0,0}}; 
 
 //Clear a data buffer
 void resetBuffer(uint8_t buffer[PIXEL_NUMBER][3]);
@@ -51,11 +53,14 @@ int main(void)
   clearData(PIXEL_NUMBER);
   for (uint8_t i = 0; i <= PIXEL_NUMBER; i++) {
     uint32_t initTick = getTicks();
-    while (getTicks() < initTick+200);
+    while (getTicks() < initTick+200){
+      reloadWdg();
+  }
     writeData(*ACTIVE_DATA_BUFFER, i);
   }
 
   while(1){
+    reloadWdg();
     switch (press) {
     case 0:
       ACTIVE_DATA_BUFFER = &INIT_DATA_BUFFER;

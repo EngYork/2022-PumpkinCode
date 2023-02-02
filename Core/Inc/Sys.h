@@ -13,6 +13,8 @@ void EnableSpiDMA(const uint8_t* source, const uint16_t numBytes);
 uint8_t getButtonPressed(void);
 /* Clears button state */
 void clearButtonPress(void);
+/* Reload watchdog */
+void reloadWdg(void);
 
 void SysTick_Handler(void);
 /* Get current Ticks */

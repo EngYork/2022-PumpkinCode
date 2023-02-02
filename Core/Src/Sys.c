@@ -5,6 +5,7 @@
 #include <stdint.h>
 
 void InitClocks(void);
+void InitWDG(void);
 void InitSPI(void);
 void InitGPIO(void);
 
@@ -16,6 +17,7 @@ void InitSys(void) {
   SystemInit();
   __disable_irq();
   InitClocks();
+  //  InitWDG();
   InitGPIO();
   InitSPI();
   __enable_irq();
@@ -25,8 +27,7 @@ void InitSys(void) {
 void InitClocks(void) {
   RCC->APB2ENR |= (uint32_t)1 << 22; //Enable DBG clock
   RCC->APB2ENR |= (uint32_t)1; //Enable SYSCFG clock
-  RCC->AHBENR |= (uint32_t)1; //Enable DMA clock
-  
+  RCC->AHBENR |= (uint32_t)1; //Enable DMA clock  
   FLASH->ACR |= (uint32_t)1; //Set 1 wait state on NVM
   RCC->CFGR |= (uint32_t)1 << 15; //Wakeup to HSI16
   RCC->CR &= ~((uint32_t)1 << 24); //Disable PLL
@@ -40,6 +41,7 @@ void InitClocks(void) {
   while (!(RCC->CR & ((uint32_t)1 << 25))); //Wait till PLL is stable
   RCC->CFGR |= (uint32_t)0b11; //Set PLL as system clock
   while (!(RCC->CFGR & (uint32_t)0b11 << 2)); //Wait till PLL is set as system clock
+  
   SystemCoreClockUpdate();
   RCC->APB1ENR |= (uint32_t)1 << 28; //Enable PWR config clock
   SysTick_Config(SystemCoreClock / 1000);
@@ -79,6 +81,18 @@ void InitGPIO(void) {
   NVIC_SetPriority(EXTI4_15_IRQn, 0);
   EXTI->IMR |= (uint32_t)1<<6; //Enable EXTI Interrupt for PA6
   EXTI->RTSR |= (uint32_t)1<<6; //Rising Trigger
+}
+
+void InitWDG(void){
+    DBGMCU->APB1FZ |= (uint32_t)1<<12; //Stop watchdog in Debug
+    IWDG->KR = 0x5555; //Unlock
+    while (!(IWDG->SR & (uint32_t)1<<1)); //Wait till unlocked
+    IWDG->PR = 0b010; //Div 16 prescale
+    reloadWdg(); //Lock and start
+}
+
+void reloadWdg(void) {
+  IWDG->KR = 0xAAAA;
 }
 
 uint8_t getButtonPressed(void) {
